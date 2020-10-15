@@ -8,3 +8,4 @@ steps:
 - script: |
     sudo apt-get install -y nasm
     make
+  displayName: 'Run a one-line script'
