@@ -1,6 +1,6 @@
 all:img
 boot:
-	nasm helloos.nas -o bootloader
+	nasm bootloader.nas -o bootloader
 img:boot
 	dd if=bootloader of=helloos.img count=1 bs=512
 	dd if=/dev/zero of=helloos.img bs=512 seek=1 skip=1 count=2879
