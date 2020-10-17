@@ -1,4 +1,5 @@
 ;bootloader
+cyls equ 10
 	org 0x7c00;jump 0x7c00
 	jmp entry
 	db 0x90
@@ -33,13 +34,42 @@ entry:
     mov ch,0
     mov dh,0
     mov cl,2
+readloop:
+    mov si,0
 
+retry:
     mov ah,0x02
     mov al,1
     mov bx,0
     mov dl,0x00
     int 0x13
-    jc error
+    jnc next
+    add si,1
+    cmp si,5
+    jae error
+    mov ah,0x00
+    mov dl,0x00
+    int 0x13
+    jmp retry
+
+next:
+    mov ax,es
+    add ax,0x0020
+    mov es,ax
+    add cl,1
+    cmp cl,18
+    jbe readloop
+    mov cl,1
+    add dh,1
+    cmp dh,2
+    jb readloop
+    mov dh,0
+    add ch,1
+    cmp ch,cyls
+    jb readloop
+
+    mov [0x0ff0],ch
+    jmp 0xc200
 
 error:
     mov si,msg
