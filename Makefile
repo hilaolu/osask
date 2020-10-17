@@ -1,7 +1,10 @@
 all:img
-img:
-	nasm helloos.nas -o helloos.img
+boot:
+	nasm helloos.nas -o bootloader
+img:boot
+	dd if=bootloader of=helloos.img count=1 bs=512
+	dd if=/dev/zero of=helloos.img bs=512 seek=1 skip=1 count=2879
 run:
-	qemu-system-x86_64 -fda helloos.img
+	qemu-system-x86_64 -drive file=helloos.img,if=floppy
 clean:
-	rm helloos.img
+	rm bootloader helloos.img

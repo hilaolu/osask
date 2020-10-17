@@ -1,1 +1,1 @@
-[![Build Status](https://dev.azure.com/phyzaitlu/osask/_apis/build/status/hilaolu.osask?branchName=master)](https://dev.azure.com/i0302/osask/_build/latest?definitionId=1&branchName=master)
+[![Build Status](https://dev.azure.com/phyzaitlu/osask/_apis/build/status/hilaolu.osask?branchName=master)](https://dev.azure.com/phyzaitlu/osask/_build/latest?definitionId=1&branchName=master)
