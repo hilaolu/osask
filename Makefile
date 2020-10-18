@@ -1,19 +1,19 @@
-all:img
-boot:
-	nasm bootloader.nas -o bootloader
-img:boot osask
-	dd if=bootloader of=osask.img count=1 bs=512
-	dd if=/dev/zero of=osask.img bs=512 seek=1 skip=1 count=2879
-osask:
-	nasm osask.nas -o osask.sys
-run:
-	qemu-system-x86_64 -drive file=osask.img,if=floppy
+src=bootloader.s
+obj=bootloader.o
+elf=bootloader.elf
+bootloader=bootloader.out
+asm=bootloader.asm
+
+all:$(bootloader)
+
+$(bootloader):$(src)
+	gcc -c $(src) -m32 -o $(obj)
+	ld -m elf_i386 $(obj) -e start -Ttext 0x7c00 -o $(elf)
+	objcopy -S -O binary -j .text $(elf) $(bootloader)
+	objdump -S $(elf) > $(asm)
+
+run:$(asm)
+	qemu-system-x86_64 -fda $(bootloader)
+
 clean:
-	rm bootloader *.img *.sys
-copy:
-	sudo mkdir -p /tmp/floppy
-	sudo mount -o loop osask.img /tmp/floppy -o fat=12
-	sleep 1
-	sudo cp osask.sys /tmp/floppy
-	sleep 1
-	sudo umount /tmp/floppy
+	rm $(obj) $(elf) $(bootloader) $(asm)
