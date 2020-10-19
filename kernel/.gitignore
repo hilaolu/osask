@@ -1,7 +1,0 @@
-*.img
-bootloader
-*.sys
-*.asm
-*.elf
-*.o
-*.out

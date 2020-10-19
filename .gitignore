@@ -1,7 +1,7 @@
-*.img
-bootloader
-*.sys
-*.asm
-*.elf
-*.o
-*.out
+**/*.img
+**/bootloader
+**/*.sys
+**/*.asm
+**/*.elf
+**/*.o
+**/*.out
