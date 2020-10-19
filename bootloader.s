@@ -1,8 +1,9 @@
+
 .global start
 .code16
 start:
     jmp entry /*just jmp*/
-	.byte 0x00 /*8bit*/
+    .byte 0x00 /*8bit*/
     .ascii "bootload"
     .word 512 /*2 byte*/
     .byte 1 /*data start with .*/
@@ -23,7 +24,7 @@ start:
     .fill 18 /*resb = fill??*/
 
 entry:
-	mov $0,%ax /*compared to intel syntax,operand and operator is reversed*/
+    mov $0,%ax
     mov %ax,%ss
     mov $0x7c00,%sp
     mov %ax,%ds
@@ -34,6 +35,7 @@ entry:
     mov $0,%dh
     mov $2,%cl
 
+readloop:
     mov $0,%si
 
 retry:
@@ -42,7 +44,7 @@ retry:
     mov $0,%bx
     mov $0x00,%dl
     int $0x13
-    jnc ok
+    jnc next
     add $1,%si
     cmp $5,%si
     jae error
@@ -51,35 +53,44 @@ retry:
     int $0x13
     jmp retry
 
-ok:
-    mov $okmsg,%si
-    call putloop
-    jc fin
-
-fin:
-    hlt
-    jmp fin
+next:
+    mov %es,%ax
+    add $0x0020,%ax
+    mov %ax,%es
+    add $1,%cl
+    cmp $18,%cl
+    jbe readloop
+    mov $1,%cl
+    add $1,%dh
+    cmp $2,%dh
+    jb readloop
+    mov $0,%dh
+    add $1,%ch
+    cmp $10,%ch
+    jb readloop
+    jmp 0xc400
 
 error:
     mov $msg,%si
     call putloop
 
-
 putloop:
-    movb (%si),%al /*cpu doesn't knows how long the first operand is*/
+    mov (%si),%al
     add $1,%si
-    cmp $0,%al /*compare*/
-    je fin /*jump if equal*/
-    movb $0x0e,%ah
-    movw $15,%bx
-    int $0x10 /*interrupt*/
+    cmp $0,%al
+    je fin
+    mov $0x0e,%ah
+    mov $15,%bx
+    int $0x10
     jmp putloop
 
+fin:
+    hlt
+    jmp fin
 
 msg:
-    .asciz "\r\nload failed"
-okmsg:
-    .asciz "\r\nok"
+    .asciz "load error"
+
 
 .org 510
 .word 0xaa55
