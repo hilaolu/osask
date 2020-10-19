@@ -68,6 +68,7 @@ next:
     add $1,%ch
     cmp $10,%ch
     jb readloop
+    mov %ch,(0x0ff0)
     jmp 0xc400
 
 error:

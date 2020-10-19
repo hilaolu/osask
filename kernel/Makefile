@@ -1,4 +1,4 @@
-src=osask.s
+src=osask.S
 obj=osask.o
 elf=osask.elf
 boot=osask.sys
@@ -12,4 +12,4 @@ $(boot):$(src)
 	objdump -S $(elf) > $(asm)
 
 clean:
-	rm $(obj) $(elf) $(asm) 
+	rm $(obj) $(elf) $(asm)

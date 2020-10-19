@@ -1,4 +1,4 @@
-src=bootloader.s
+src=bootloader.S
 obj=bootloader.o
 elf=bootloader.elf
 bootloader=bootloader.img
